@@ -399,6 +399,7 @@ extern const AVFilter ff_vf_procamp_vaapi;
 extern const AVFilter ff_vf_program_opencl;
 extern const AVFilter ff_vf_pseudocolor;
 extern const AVFilter ff_vf_psnr;
+extern const AVFilter ff_vf_psnr_opencl;
 extern const AVFilter ff_vf_pullup;
 extern const AVFilter ff_vf_qp;
 extern const AVFilter ff_vf_random;

@@ -422,6 +422,7 @@ OBJS-$(CONFIG_PREWITT_OPENCL_FILTER)         += vf_convolution_opencl.o opencl.o
 OBJS-$(CONFIG_PROCAMP_VAAPI_FILTER)          += vf_procamp_vaapi.o vaapi_vpp.o
 OBJS-$(CONFIG_PROGRAM_OPENCL_FILTER)         += vf_program_opencl.o opencl.o framesync.o
 OBJS-$(CONFIG_PSEUDOCOLOR_FILTER)            += vf_pseudocolor.o
+OBJS-$(CONFIG_PSNR_OPENCL_FILTER)            += vf_psnr_opencl.o framesync.o opencl/psnr.o
 OBJS-$(CONFIG_PSNR_FILTER)                   += vf_psnr.o framesync.o
 OBJS-$(CONFIG_PULLUP_FILTER)                 += vf_pullup.o
 OBJS-$(CONFIG_QP_FILTER)                     += vf_qp.o
