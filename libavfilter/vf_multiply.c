@@ -72,9 +72,8 @@ static int config_input(AVFilterLink *inlink)
     return 0;
 }
 
-static void multiply(const uint8_t *ssrc, const uint8_t *rref, uint8_t *ddst,
-                     float scale, float offset, int w)
-{
+static inline void multiply(const uint8_t *ssrc, const uint8_t *rref,
+                            uint8_t *ddst, float scale, float offset, int w) {
     const float *src = (const float *)ssrc;
     const float *ref = (const float *)rref;
     float *dst = (float *)ddst;
@@ -86,8 +85,8 @@ static void multiply(const uint8_t *ssrc, const uint8_t *rref, uint8_t *ddst,
     }
 }
 
-static int multiply_slice(AVFilterContext *ctx, void *arg, int jobnr, int nb_jobs)
-{
+static inline int multiply_slice(AVFilterContext *ctx, void *arg, int jobnr,
+                                 int nb_jobs) {
     MultiplyContext *s = ctx->priv;
     const float offset = s->offset;
     const float scale = s->scale;
