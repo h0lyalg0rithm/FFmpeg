@@ -59,7 +59,7 @@ typedef struct PSNRContext {
 } PSNRContext;
 
 #define OFFSET(x) offsetof(PSNRContext, x)
-#define FLAGS AV_OPT_FLAG_FILTERING_PARAM|AV_OPT_FLAG_VIDEO_PARAM
+#define FLAGS AV_OPT_FLAG_FILTERING_PARAM | AV_OPT_FLAG_VIDEO_PARAM
 
 static const AVOption psnr_options[] = {
     {"stats_file", "Set file where to store per-frame difference information", OFFSET(stats_file_str), AV_OPT_TYPE_STRING, {.str=NULL}, 0, 0, FLAGS },
@@ -81,31 +81,26 @@ static inline double get_psnr(double mse, uint64_t nb_frames, int max)
     return 10.0 * log10(pow_2(max) / (mse / nb_frames));
 }
 
-static uint64_t sse_line_8bit(const uint8_t *main_line,  const uint8_t *ref_line, int outw)
+#define SSE_LINE(name, type)                                            \
+    static uint64_t sse_line_##name(const uint8_t *_main_line,          \
+                                    const uint8_t *_ref_line, int outw) \
+    {                                                                   \
+        int j;                                                          \
+        uint64_t m2 = 0;                                                \
+        const type *main_line = (const type *)_main_line;               \
+        const type *ref_line = (const type *)_ref_line;                 \
+                                                                        \
+        for (j = 0; j < outw; j++)                                      \
+            m2 += pow_2(main_line[j] - ref_line[j]);                    \
+                                                                        \
+        return m2;                                                      \
+    }
+
+SSE_LINE(8bit, uint8_t)
+SSE_LINE(16bit, uint16_t)
+
+typedef struct ThreadData
 {
-    int j;
-    unsigned m2 = 0;
-
-    for (j = 0; j < outw; j++)
-        m2 += pow_2(main_line[j] - ref_line[j]);
-
-    return m2;
-}
-
-static uint64_t sse_line_16bit(const uint8_t *_main_line, const uint8_t *_ref_line, int outw)
-{
-    int j;
-    uint64_t m2 = 0;
-    const uint16_t *main_line = (const uint16_t *) _main_line;
-    const uint16_t *ref_line = (const uint16_t *) _ref_line;
-
-    for (j = 0; j < outw; j++)
-        m2 += pow_2(main_line[j] - ref_line[j]);
-
-    return m2;
-}
-
-typedef struct ThreadData {
     const uint8_t *main_data[4];
     const uint8_t *ref_data[4];
     int main_linesize[4];
